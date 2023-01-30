@@ -1,0 +1,107 @@
+Cypress
+
+	Intial SetUp Steps:
+		1. Install node.js to execute JavaScript code
+		2. Add node in system environment variables as 'NODE_HOME'
+		3. Install 'Visual Studio Code' IDE
+		4. Create 'package.json' for the project. This will help to manage project dependencies.
+			a) npm -i init
+		5. Install Cypress dependency
+			a) npm install cypress --save-dev
+			b) 'node_modules' folder gets created
+			c) cypress dependency is added in package.json under devDependencies with version details.
+		6. Launch Cypress Dashboard
+			a) Execute 'node_modules/.bin/cypress open' to launch Cypress Dashboard
+			b) Select 'E2E Testing' type
+			c) After selecting E2E testing type, few files will be automatically added by cypress in the project. PFB below,
+				- cypress folder - fixtures, support
+				- cypress.config.js
+			c) Select respective browser to execute testcases in dashboard.
+			d) A new window will be launched in respective selected browser. This is called 'Cypress TestRunner'.
+		7. Create new 'integration' folder under 'cypress' folder. 
+			a) cypress intial days 'integration' folder creation is mandatory for identifying tests in project, but in current versions it is not mandatory. To identify tests we mention the path in 'specPattern' variable.
+		8. Add 'specPattern' property in 'cypress.config.js' file. We need to pass tests path.
+			Example: specPattern: 'cypress/integration/web/*.js'
+		9. After adding and saving the path, the tests are visible in testRunner.
+		10. Tests can be executed in multiple ways,
+			a) Cypress TestRunner: Can be executed via testRunner, launches browser to execute.
+			b) Command Line: By default it will run in headless (no UI) Electron browser
+				'node_modules/.bin/cypress run'			 (Electron Headless)
+				'node_modules/.bin/cypress run --headed'	 (Electron Headed)
+				'node_modules/.bin/cypress run --browser chrome' (Chrome Headed)
+
+	Mocha Framework:
+		* Tests can be written in JavaScript using Jasmine/Mocha frameworks. But Cypress recommends Mocha framework for tests.
+		* describe & it - 'describe' considered as TestSuite & 'it' considered as TestCase in Mocha.
+			describe('TestSuite', function() {
+				it('TestCase1', function() {
+					Test Steps
+				})
+				it('TestCase2', function() {
+					Test Steps
+				})
+			})
+
+	Cypress Framework Structure:
+		* 'node_modules' folder gets created when installing cypress.
+		* 'cypress' folder is created while launching Cypress Dashboard
+			- fixtures - As test data should not hardcoded in tests. Test data to be placed in this folder.
+			- integration - Created by us, all tests are present under this folder.
+			- plugins - This is customized code used as listeners to handle cypress events. (Currently it may have been removed)
+			- support - All reusable methods are placed in this folder inside 'commands.js' file so that all tests will have access to that.
+				Note:
+				* We can also create a separate folder and place all the common functions. By doing this we need to import the file and create object of that and use those methods.
+				* But placing common functions in 'support' folder, by default these are available in tests it is designed in framework structure that the tests scan the support folder.
+				* re-usable methods are placed in 'support/commands.js'
+		* 'cypress.config.js' contains all the project configuration data. This is auto generated when we open TestRunner for first time.
+			- specPattern property is added to mention tests path in project.
+			- We can also add other properties. Refer TestRunner for more details, PFB the navigation
+				1. Open TestRunner
+				2. On left menu, go to 'Settings'
+				3. Click on 'Project Settings'
+				4. Navigate below, under 'Resolved configuration'. We can observe multiple default properties.
+				5. To override those default values, we provide value in cypress.config.js file.
+			- In previous version 'cypress.config.js' was named 'cypress.json'
+
+	Note:
+		* DefultCommandTimeout time is 4000ms (4 Secs).
+		* Browser Support: Cypress supports MS Edge, Chrome, Firefox, Electron. Doesn't support IE.
+		* WebElement Locator: Cypress only supports CSS Selector.
+		* Add the below line to get auto suggestions to get Cypress methods
+			'/// <reference types="Cypress" />'
+		* Tests execution will automatically gets triggered if TestRunner observes any change in code.
+		* Handle Invisible Elements: Use ':visible' at end of CSS locator, this will help to only highlight visible elements in WebPage.
+		* console.log() vs cy.log():
+			- The Output of console.log() is printed in browser developer tools console.
+			- The Output of cy.log() is printed in Cyress TestRunner.
+		* Chai Assertions: Internally these will also take care of Promise.
+	
+	Asynchronous: Cypress is Asynchronous in nature. But the internal architecture of Cypress handles to make it Synchronous.
+		- Asynchronous: This means the execution doesn't wait about the result of previous step.
+			Example: Even though the application URL is not loaded, it moves to next step to find the element.
+		- node.js is Asynchronous, so applications built on it are also Asynchronous.
+		- But the architecture of Cypress handles to make it Synchronous. Wrapper classes are used for Synchronization.
+		- There are few cases user need to handle the Synchronous situation.
+		- If we introduce non-cypress code to interact with Cypress code. Then we have to resolve manually the Promise and execute the next step, if not it throws an error and execution stops.
+		- Non-Cypress commands cannot resolve Promise internally.
+	
+		Asynchronous Mechanism: Wrapper classes are used for Synchronization.
+			1. Internally synchronization is achieved using an 'Promise'. This Promise comes with 'Resolved', 'Rejection' & 'Pending'. Based on the step Promise result next step is executed.
+			2. Incase Cypress is not handling Asynchronous nature, with help of 'then()' method user should validate the previous step result and move on to next step execution.
+			3. Using then() method in every single step makes the code look clumsy.
+			4. Cypress is handling Asynchronous nature, 'then()' method is internally used to make the script Synchronized.
+
+	Functions:
+		Cypress
+			visit() - Launches the URL
+			get('locator') - Retrieves element details from webpage
+			type() - Enter text
+			wait() - Static wait, we pass time in ms
+			log() - prints in Cypress TestRunner
+			as() - Alias functionality is used instead of retrieving locator data from webpage again and again. Use '@' with alias name.
+			find('locator') - It will search and filter based on cy.get('locator')
+		Chai
+			should() - assertion
+		jQuery
+			text() - get content of the element
+	
