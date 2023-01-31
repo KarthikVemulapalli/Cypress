@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 //The above line will help to get auto suggestions for Cypress methods
 
-describe('Sample TestSuite', function(){
-    it('Sample TestCase', function(){
+describe('Basic TestSuite', function(){
+    it('Basic TestCase', function(){
         cy.visit('https://rahulshettyacademy.com/seleniumPractise/#/')         //Launch URL
         cy.get('input.search-keyword').type('Cucumber')
         cy.wait(1000)

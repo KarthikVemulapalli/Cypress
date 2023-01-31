@@ -1,8 +1,8 @@
 /// <reference types="Cypress" />
 //The above line will help to get auto suggestions for Cypress methods
 
-describe('Sample TestSuite', function(){
-    it('Sample TestCase', function(){
+describe('Advanced TestSuite', function(){
+    it('Advanced TestCase', function(){
         
         cy.visit('https://rahulshettyacademy.com/seleniumPractise/#/')         //Launch URL
         cy.get('input.search-keyword').type('Ca')
@@ -43,10 +43,10 @@ describe('Sample TestSuite', function(){
 
         //Print the element innner text
         //we cannot use text() directly on cypress methods because it is jquery method, thats why we externally resolving Promise using then()
-        cy.get('.brand').then(function($logoelement)
+        cy.get('.brand').then(function(logoelement)
         {
             //log() Prints in Cypress TestRunner
-            cy.log("Header Logo Text - "+ $logoelement.text())
+            cy.log("Header Logo Text - "+ logoelement.text())
         })
 
         //assert if logo text is correctly displayed

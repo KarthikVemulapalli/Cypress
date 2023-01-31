@@ -11,7 +11,8 @@ Cypress
 			b) 'node_modules' folder gets created
 			c) cypress dependency is added in package.json under devDependencies with version details.
 		6. Launch Cypress Dashboard
-			a) Execute 'node_modules/.bin/cypress open' to launch Cypress Dashboard
+			a) Execute the command to launch Cypress Dashboard
+				node_modules/.bin/cypress open
 			b) Select 'E2E Testing' type
 			c) After selecting E2E testing type, few files will be automatically added by cypress in the project. PFB below,
 				- cypress folder - fixtures, support
@@ -62,8 +63,20 @@ Cypress
 				4. Navigate below, under 'Resolved configuration'. We can observe multiple default properties.
 				5. To override those default values, we provide value in cypress.config.js file.
 			- In previous version 'cypress.config.js' was named 'cypress.json'
+	
+	Handle iFrames:
+		1. Install Cypress iFrame dependency
+			npm install -D cypress-iframe
+		2. Import Cypress iFrame package
+			import 'cypress-iframe'
+		3. Add below line to get iFrame methods auto suggestion
+			/// <reference types="cypress-iframe" />
+		4. Add the iFrame in frameloaded
+			cy.frameLoaded('iFrameLocator')
+		5. For every element interaction inside an iFrame, we need to include 'iframe()' and find() to be used to interact with web element {get() will not work}.
 
 	Note:
+		* By using Cypress, we can manipulate the DOM structure of WebPage.
 		* DefultCommandTimeout time is 4000ms (4 Secs).
 		* Browser Support: Cypress supports MS Edge, Chrome, Firefox, Electron. Doesn't support IE.
 		* WebElement Locator: Cypress only supports CSS Selector.
@@ -75,6 +88,9 @@ Cypress
 			- The Output of console.log() is printed in browser developer tools console.
 			- The Output of cy.log() is printed in Cyress TestRunner.
 		* Chai Assertions: Internally these will also take care of Promise.
+		* Cypress only focuses on web page, it will automatically closes alerts.
+		* Cypress cannot handle child window handles for automation.
+			- 'Target' attribute hepls in launching URL in new window. To work in Cypress, we need to remove Target attribute of element in DOM and launch the URL in same page.
 	
 	Asynchronous: Cypress is Asynchronous in nature. But the internal architecture of Cypress handles to make it Synchronous.
 		- Asynchronous: This means the execution doesn't wait about the result of previous step.
@@ -84,6 +100,7 @@ Cypress
 		- There are few cases user need to handle the Synchronous situation.
 		- If we introduce non-cypress code to interact with Cypress code. Then we have to resolve manually the Promise and execute the next step, if not it throws an error and execution stops.
 		- Non-Cypress commands cannot resolve Promise internally.
+		- The symbol '=>' resolves the Promise. This symbol is equivalent to 'then()'
 	
 		Asynchronous Mechanism: Wrapper classes are used for Synchronization.
 			1. Internally synchronization is achieved using an 'Promise'. This Promise comes with 'Resolved', 'Rejection' & 'Pending'. Based on the step Promise result next step is executed.
@@ -93,15 +110,25 @@ Cypress
 
 	Functions:
 		Cypress
-			visit() - Launches the URL
+			visit() - Launches the URL. Using this we can navigate to only single unique domain and can navigate to multiple subdomains.
 			get('locator') - Retrieves element details from webpage
+			click() - clicks on web element
+			click(force:true) - this function clicks on invisble elements forcibly
 			type() - Enter text
 			wait() - Static wait, we pass time in ms
 			log() - prints in Cypress TestRunner
 			as() - Alias functionality is used instead of retrieving locator data from webpage again and again. Use '@' with alias name.
 			find('locator') - It will search and filter based on cy.get('locator')
+			on() - It is used to trigger events in DOM webpage
+			invoke() - Used to invoke jQuery function
+			go() - Used for page navigation
+			next() - Used to move to next immediate sibling webelement, onlys works on get()
+			url() - retrieves current page URL
 		Chai
 			should() - assertion
 		jQuery
 			text() - get content of the element
+			removeAttr() - Manipulate DOM, remove certain attribute of element
+			show() - Displays all elements which are enabled when mouse hover
+			prop() - get property value of the element
 	
